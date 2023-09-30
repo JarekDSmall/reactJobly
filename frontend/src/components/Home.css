@@ -1,0 +1,12 @@
+.home {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* This will make it take the full viewport height */
+  }
+  
+  .login-signup-options {
+    margin-top: 20px;
+  }
+  

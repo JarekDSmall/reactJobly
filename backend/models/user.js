@@ -56,45 +56,60 @@ class User {
    * Throws BadRequestError on duplicates.
    **/
 
-  static async register(
-      { username, password, firstName, lastName, email, isAdmin }) {
-    const duplicateCheck = await db.query(
-          `SELECT username
-           FROM users
-           WHERE username = $1`,
+  static async register({ username, password, firstName, lastName, email, isAdmin }) {
+    console.log("Inside User.register method");
+    
+    // Check for duplicate username
+    console.log("Checking for duplicate username");
+
+    const queryString = `SELECT username FROM users WHERE username = $1`;
+    console.log("Executing query:", queryString);
+    console.log("With parameters:", [username]);
+
+    try {
+      const duplicateCheck = await db.query(
+        `SELECT username
+         FROM users
+         WHERE username = $1`,
         [username],
     );
+    console.log("Query result:", duplicateCheck.rows);
 
-    if (duplicateCheck.rows[0]) {
-      throw new BadRequestError(`Duplicate username: ${username}`);
-    }
-
+        if (duplicateCheck.rows[0]) {
+            throw new BadRequestError(`Duplicate username: ${username}`);
+        }
+    }  catch (error) {
+    console.error("Error executing duplicate username check:", error);
+    throw error;
+}
+  
+    // Hash the password and register the new user
+    console.log("Hashing password");
     const hashedPassword = await bcrypt.hash(password, BCRYPT_WORK_FACTOR);
-
+    console.log("Password hashed");
+  
+    console.log("Inserting new user into the database");
     const result = await db.query(
-          `INSERT INTO users
-           (username,
-            password,
-            first_name,
-            last_name,
-            email,
-            is_admin)
-           VALUES ($1, $2, $3, $4, $5, $6)
-           RETURNING username, first_name AS "firstName", last_name AS "lastName", email, is_admin AS "isAdmin"`,
-        [
-          username,
-          hashedPassword,
-          firstName,
-          lastName,
-          email,
-          isAdmin,
-        ],
+      `INSERT INTO users
+       (username, password, first_name, last_name, email, is_admin)
+       VALUES ($1, $2, $3, $4, $5, $6)
+       RETURNING username, first_name AS "firstName", last_name AS "lastName", email, is_admin AS "isAdmin"`,
+      [
+        username,
+        hashedPassword,
+        firstName,
+        lastName,
+        email,
+        isAdmin,
+      ],
     );
-
+  
+    console.log("User registered in database");
     const user = result.rows[0];
-
+    console.log("User registered successfully:", user);
     return user;
   }
+  
 
   /** Find all users.
    *

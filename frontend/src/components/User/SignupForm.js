@@ -3,22 +3,54 @@ import { useNavigate } from 'react-router-dom';
 import api from '../../helpers/api';
 
 function SignupForm() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [email, setEmail] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
+  const [formData, setFormData] = useState({
+    username: '',
+    password: '',
+    email: '',
+    firstName: '',
+    lastName: '',
+  });
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState(null);
+  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+    setErrors({
+      ...errors,
+      [name]: '',
+    });
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    for (const field in formData) {
+      if (!formData[field].trim()) {
+        newErrors[field] = `${field.charAt(0).toUpperCase() + field.slice(1)} is required`;
+      }
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) return;
+    setLoading(true);
     try {
-      // Perform signup logic using API helper
-      await api.register({ username, password, email, firstName, lastName });
-      navigate('/login'); // Navigate to the login route after successful signup
+      await api.register(formData);
+      setMessage('Registration successful! You are now logged in.');
+      navigate('/Home');
     } catch (error) {
       console.error("Signup Error:", error);
-      // Handle signup error
+      setMessage('Registration failed. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -26,25 +58,32 @@ function SignupForm() {
     <form onSubmit={handleSubmit}>
       <label>
         Username:
-        <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
+        <input type="text" name="username" value={formData.username} onChange={handleChange} />
+        {errors.username && <span>{errors.username}</span>}
       </label>
       <label>
         Email:
-        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+        <input type="email" name="email" value={formData.email} onChange={handleChange} />
+        {errors.email && <span>{errors.email}</span>}
       </label>
       <label>
         Password:
-        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="current-password" />
+        <input type="password" name="password" value={formData.password} onChange={handleChange} autoComplete="current-password" />
+        {errors.password && <span>{errors.password}</span>}
       </label>
       <label>
         First Name:
-        <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+        <input type="text" name="firstName" value={formData.firstName} onChange={handleChange} />
+        {errors.firstName && <span>{errors.firstName}</span>}
       </label>
       <label>
         Last Name:
-        <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} />
+        <input type="text" name="lastName" value={formData.lastName} onChange={handleChange} />
+        {errors.lastName && <span>{errors.lastName}</span>}
       </label>
-      <button type="submit">Sign Up</button>
+      <button type="submit" disabled={loading}>Sign Up</button>
+      {message && <p>{message}</p>}
+      {loading && <p>Loading...</p>}
     </form>
   );
 }

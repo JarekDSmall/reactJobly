@@ -8,6 +8,7 @@ const express = require("express");
 const { BadRequestError } = require("../expressError");
 const { ensureAdmin } = require("../middleware/auth");
 const Company = require("../models/company");
+const Job = require("../models/job");
 
 const companyNewSchema = require("../schemas/companyNew.json");
 const companyUpdateSchema = require("../schemas/companyUpdate.json");
@@ -79,10 +80,29 @@ router.get("/", async function (req, res, next) {
  * Authorization required: none
  */
 
-router.get("/:handle", async function (req, res, next) {
+router.get("/:handle", async (req, res, next) => {
   try {
-    const company = await Company.get(req.params.handle);
+    const handle = req.params.handle;
+    if (!handle) {
+      throw new BadRequestError("Invalid company handle provided.");
+    }
+    const company = await Company.get(handle);
     return res.json({ company });
+  } catch (err) {
+    return next(err);
+  }
+});
+
+/** GET /:handle/jobs => { jobs: [job, ...] }
+ *
+ * Returns list of jobs for a specific company.
+ *
+ * Authorization required: none
+ */
+router.get("/:handle/jobs", async function (req, res, next) {
+  try {
+    const jobs = await Job.findByCompanyHandle(req.params.handle);
+    return res.json({ jobs });
   } catch (err) {
     return next(err);
   }

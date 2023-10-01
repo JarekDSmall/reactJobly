@@ -1,5 +1,5 @@
-// App.js
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navigation from './components/Navigation';
 import LoginForm from './components/User/LoginForm';
@@ -14,11 +14,21 @@ import JobList from './components/Jobs/JobList';
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const handleLogin = () => {
+  useEffect(() => {
+    // Check if token exists in localStorage on initial render
+    const token = localStorage.getItem('token');
+    if (token) {
+      setIsLoggedIn(true);
+    }
+  }, []);
+
+  const handleLogin = (token) => {
+    localStorage.setItem('token', token); // Store token in localStorage
     setIsLoggedIn(true);
   };
 
   const handleLogout = () => {
+    localStorage.removeItem('token'); // Remove token from localStorage
     setIsLoggedIn(false);
   };
 

@@ -33,6 +33,27 @@ class Job {
 
     return job;
   }
+    /** Find all jobs for a specific company by its handle.
+   *
+   * Returns [{ id, title, salary, equity, companyHandle }, ...]
+   * Throws NotFoundError if not found.
+   **/
+    static async findByCompanyHandle(handle) {
+      const result = await db.query(
+        `SELECT id,
+                title,
+                salary,
+                equity,
+                company_handle AS "companyHandle"
+         FROM jobs
+         WHERE company_handle = $1`, [handle]);
+  
+      const jobs = result.rows;
+  
+      if (jobs.length === 0) throw new NotFoundError(`No jobs found for company: ${handle}`);
+  
+      return jobs;
+    }
 
   /** Find all jobs (optional filter on searchFilters).
    *

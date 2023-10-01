@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import JoblyApi from '../helpers/api';
+import JoblyApi from '../../helpers/api';
+
 
 function JobCard({ job }) {
   const [applied, setApplied] = useState(false);

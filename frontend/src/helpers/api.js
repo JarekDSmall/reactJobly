@@ -44,8 +44,12 @@ class JoblyApi {
     return res.jobs;
   }
 
+  static async getJobsByCompany(handle) {
+    let res = await this.request(`companies/${handle}/jobs`);
+    return res.jobs;
+  }
+
   static async login(credentials) {
-    // Check if both username and password are present in the credentials
     if (!credentials.username || !credentials.password) {
       console.error("Missing username or password in credentials:", credentials);
       throw new Error("Missing username or password");
@@ -56,7 +60,7 @@ class JoblyApi {
     JoblyApi.token = res.token;
     localStorage.setItem('token', res.token);
     return res.token;
-}
+  }
 
   static async register(userData) {
     let res = await this.request(`auth/register`, userData, "post");
@@ -65,7 +69,7 @@ class JoblyApi {
     return res.token;
   }
 
-
+  // ... add more methods as needed ...
 }
 
 JoblyApi.token = localStorage.getItem('token') || null;

@@ -2,10 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './Home.css';
 
-
 function Home({ isLoggedIn }) {
   console.log("Is Logged In:", isLoggedIn);
-  const username = localStorage.getItem('username'); // Assuming you store the username in local storage
 
   return (
     <div className="home">
@@ -17,7 +15,7 @@ function Home({ isLoggedIn }) {
           <Link to="/signup">Sign Up</Link>
         </div>
       ) : (
-        <h2>Welcome Back, {username}!</h2> // Displaying the username
+        <h2>Welcome Back!</h2> 
       )}
     </div>
   );

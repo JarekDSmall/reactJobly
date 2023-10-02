@@ -1,6 +1,7 @@
 // Purpose: Display basic information about a company.
 import React from 'react';
 import { Link } from 'react-router-dom';
+import '../Card.css';
 
 function CompanyCard({ company }) {
   console.log("Company ID:", company.id); // Debugging line to check the company id

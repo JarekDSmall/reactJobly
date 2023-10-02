@@ -1,17 +1,10 @@
 import React, { useState } from 'react';
-import JoblyApi from '../../helpers/api';
 
 function JobCard({ job }) {
   const [applied, setApplied] = useState(false);
 
-  const handleApply = async () => {
-    try {
-      await JoblyApi.applyForJob(job.id);
-      setApplied(true);
-    } catch (error) {
-      console.error("Error applying for job:", error);
-      
-    }
+  const handleApply = () => {
+    setApplied(true);
   };
 
   return (

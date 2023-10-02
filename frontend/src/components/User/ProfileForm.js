@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../helpers/api';
 import Cookies from 'js-cookie'; // Importing js-cookie
+import './FormStyles.css';
 
 function getUsernameFromToken(token) {
   try {

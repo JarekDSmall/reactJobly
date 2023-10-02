@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../helpers/api';
 import Cookies from 'js-cookie'; // Importing js-cookie
+import './FormStyles.css';
 
 function LoginForm({ onLogin }) {
   const [formData, setFormData] = useState({

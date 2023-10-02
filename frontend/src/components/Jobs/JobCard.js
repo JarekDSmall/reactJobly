@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import '../Card.css';
 
 function JobCard({ job }) {
   const [applied, setApplied] = useState(false);

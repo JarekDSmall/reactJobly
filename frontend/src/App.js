@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navigation from './components/Navigation';
@@ -11,24 +10,26 @@ import Companies from './components/Companies/Companies';
 import CompanyDetail from './components/Companies/CompanyDetail';
 import JobList from './components/Jobs/JobList';
 
+const TOKEN_KEY = 'jwtToken';  // Updated key
+
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     // Check if token exists in localStorage on initial render
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem(TOKEN_KEY); // Use TOKEN_KEY constant
     if (token) {
       setIsLoggedIn(true);
     }
   }, []);
 
   const handleLogin = (token) => {
-    localStorage.setItem('token', token); // Store token in localStorage
+    localStorage.setItem(TOKEN_KEY, token); // Store token in localStorage using TOKEN_KEY
     setIsLoggedIn(true);
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token'); // Remove token from localStorage
+    localStorage.removeItem(TOKEN_KEY); // Remove token from localStorage using TOKEN_KEY
     setIsLoggedIn(false);
   };
 
@@ -38,12 +39,13 @@ function App() {
       <Routes>
         <Route path="/login" element={<LoginForm onLogin={handleLogin} />} />
         <Route path="/signup" element={<SignupForm onSignup={handleLogin} />} />
-        <Route path="/profile" element={<ProfileForm />} />
+    
         {isLoggedIn && (
           <>
             <Route path="/companies/:handle" element={<CompanyDetail />} />
             <Route path="/companies" element={<Companies />} />
             <Route path="/jobs" element={<JobList />} />
+            <Route path="/profile" element={<ProfileForm />} />
           </>
         )}
         <Route path="/Home" element={<Home isLoggedIn={isLoggedIn} />} />

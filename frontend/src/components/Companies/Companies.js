@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom'; // Import the Link component
 import api from '../../helpers/api';
+import './Companies.css'
 
 function Companies() {
   const [companies, setCompanies] = useState([]);

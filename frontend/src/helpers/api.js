@@ -1,10 +1,11 @@
 import axios from "axios";
+import Cookies from 'js-cookie'; // Importing js-cookie
 
 const BASE_URL = process.env.REACT_APP_BASE_URL || "http://localhost:3001";
 
 class JoblyApi {
   // The token for interacting with the API will be stored here.
-  static token;
+  static token = Cookies.get('token');
 
   static async request(endpoint, data = {}, method = "get") {
     console.debug("API Call:", endpoint, data, method);
@@ -58,20 +59,43 @@ class JoblyApi {
     console.log("Sending credentials:", credentials);
     let res = await this.request(`auth/token`, credentials, "post");
     JoblyApi.token = res.token;
-    localStorage.setItem('token', res.token);
+    Cookies.set('token', res.token); // Set the token using js-cookie
     return res.token;
   }
 
   static async register(userData) {
     let res = await this.request(`auth/register`, userData, "post");
-    this.token = res.token;
-    localStorage.setItem('token', res.token);
+    JoblyApi.token = res.token;
+    Cookies.set('token', res.token); // Set the token using js-cookie
     return res.token;
   }
+
+
+  static async getProfile(username) {
+    // Check if username is provided
+    if (!username) {
+        console.error("Username is required to fetch profile.");
+        throw new Error("Username is required");
+    }
+
+    console.log("Fetching profile for:", username);
+    try {
+        let res = await this.request(`users/${username}`);
+        return res.user;
+    } catch (error) {
+        console.error("Profile fetch error:", error);
+        throw error;
+    }
+  } 
+
+  static async updateProfile(userData) {
+    // Use the username from userData to form the correct endpoint URL
+    let res = await this.request(`users/${userData.username}`, userData, "patch");
+    return res.user;
+}
 
   // ... add more methods as needed ...
 }
 
-JoblyApi.token = localStorage.getItem('token') || null;
 
 export default JoblyApi;

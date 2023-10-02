@@ -1,0 +1,75 @@
+/* FormStyles.css */
+
+/* General form styling */
+form {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Label styling */
+form label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+/* Input fields styling */
+form input[type="text"],
+form input[type="email"],
+form input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+/* Error message styling */
+form span {
+    display: block;
+    margin-top: -10px;
+    margin-bottom: 15px;
+    color: red;
+    font-size: 14px;
+}
+
+/* Button styling */
+form button {
+    padding: 10px 15px;
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+form button:hover {
+    background-color: #0056b3;
+}
+
+form button:disabled {
+    background-color: #e0e0e0;
+    cursor: not-allowed;
+}
+
+/* Message styling */
+form p {
+    margin-top: 15px;
+    font-size: 16px;
+}
+
+/* Success message */
+p[color="green"] {
+    color: green;
+}
+
+/* Error message */
+p[color="red"] {
+    color: red;
+}

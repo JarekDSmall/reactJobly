@@ -9,6 +9,7 @@ import Home from './components/Home';
 import Companies from './components/Companies/Companies';
 import CompanyDetail from './components/Companies/CompanyDetail';
 import JobList from './components/Jobs/JobList';
+import './App.css'
 
 const TOKEN_KEY = 'jwtToken';  // Updated key
 
